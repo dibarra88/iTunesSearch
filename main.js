@@ -9,7 +9,7 @@
 // 5. Create a way to listen for a click that will play the song in the audio play
 
 let results = document.querySelector(".slideshow-container");
-let tmpURL = "https://itunes.apple.com/search?media=music&limit=100&term=adele";
+let tmpURL = "https://itunes.apple.com/search?media=music&limit=200&term=adele";
 let songName = document.getElementById("songName");
 let slideIndex = 1;
 
@@ -52,11 +52,11 @@ function loadSongs(data) {
     songDiv += `<p id="trackName">${data.results[i].trackName}</p>
                 <p id="artistName">${data.results[i].artistName}</p></div>`
 
-    if ((i - 9) % 10 === 0) {
+    if ((i - 9) % 10 === 0 || (data.results.length - i === 1)) {
       songDiv += `</div></div>`   //close slide div
     }
   }
-  arrows=`<a class="prev" onclick="plusSlides(-1)">&#10094;</a>
+  arrows = `<a class="prev" onclick="plusSlides(-1)">&#10094;</a>
           <a class="next" onclick="plusSlides(1)">&#10095;</a>`
 
   results.innerHTML = songDiv + arrows;
@@ -68,13 +68,15 @@ document.querySelector(".slideshow-container").addEventListener('click', functio
   e.preventDefault();
   var target = e.target;
   if (target.parentElement.id !== "") {
-    var audio = document.getElementById("music-player");
-    var sname = target.parentElement.children[1].innerHTML; //song name
-    songName.innerHTML = "Now Playing: " + sname;     //display under audio tag
+    if (target.parentElement.id !== "results") {
+      var audio = document.getElementById("music-player");
+      var sname = target.parentElement.children[1].innerHTML; //song name
+      songName.innerHTML = "Now Playing: " + sname;     //display under audio tag
 
-    audio.src = target.parentElement.id;
-    audio.load();
-    audio.play();
+      audio.src = target.parentElement.id;
+      audio.load();
+      audio.play();
+    }
   }
 })
 document.getElementById("submit").addEventListener('click', function (e) {
